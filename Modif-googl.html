@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Google Profesional</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #1e1e2f;
+      color: #fff;
+    }
+    .login-box, .main-box {
+      background: rgba(0,0,0,0.7);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      text-align: center;
+      width: 350px;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      font-size: 16px;
+    }
+    .icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    .btn {
+      padding: 12px;
+      width: 100%;
+      background: #4CAF50;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #45a049;
+    }
+    .status {
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+      background: #2a2a3d;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: center;
+    }
+    /* Halaman utama */
+    .main-box {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      background: url('an.png') no-repeat center center/cover;
+      color: #fff;
+      position: relative;
+    }
+    .main-box .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .google-btn {
+      background: white;
+      color: #333;
+      border-radius: 50px;
+      padding: 12px 30px;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Box -->
+  <div class="login-box" id="loginBox">
+    <h2>Login</h2>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Masukkan Password">
+      <span class="icon" onclick="togglePassword()">🔑</span>
+    </div>
+    <button class="btn" onclick="checkPassword()">Submit</button>
+    <div class="status" id="statusMsg"></div>
+    <div id="tokenBox" style="display:none;">
+      <h3>Token Anda:</h3>
+      <input type="text" id="tokenInput" readonly>
+      <table>
+        <thead><tr><th>Token Tersimpan</th></tr></thead>
+        <tbody id="tokenTable"></tbody>
+      </table>
+      <button class="btn" onclick="enterApp()">Login ke Google</button>
+    </div>
+  </div>
+
+  <!-- Main Box -->
+  <div class="main-box" id="mainBox">
+    <div class="overlay">
+      <h1>Selamat Datang</h1>
+      <button class="google-btn" onclick="window.location.href='https://www.google.com'">
+        Masuk ke Google
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const correctPassword = "@koila"; // ganti sesuai kebutuhan
+
+    function togglePassword() {
+      const pwd = document.getElementById("password");
+      pwd.type = (pwd.type === "password") ? "text" : "password";
+    }
+
+    function generateToken(length = 12) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let token = "";
+      for (let i = 0; i < length; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return token;
+    }
+
+    function checkPassword() {
+      const pwd = document.getElementById("password").value;
+      const status = document.getElementById("statusMsg");
+      if (pwd === correctPassword) {
+        status.innerHTML = "✅ Password Benar";
+        const token = generateToken();
+        document.getElementById("tokenInput").value = token;
+        document.getElementById("tokenBox").style.display = "block";
+        // simpan token ke tabel
+        const table = document.getElementById("tokenTable");
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.textContent = token;
+        row.appendChild(cell);
+        table.appendChild(row);
+      } else {
+        status.innerHTML = "❌ Password Salah";
+        document.getElementById("tokenBox").style.display = "none";
+      }
+    }
+
+    function enterApp() {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("mainBox").style.display = "block";
+    }
+  </script>
+</body>
+</html>
